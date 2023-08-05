@@ -24,6 +24,11 @@ def set_seed(seed=SEED):
     if get_device() == 'cuda':
         torch.cuda.manual_seed(seed)
 
+def get_incorrect_preds(prediction, labels):
+        prediction = prediction.argmax(dim=1)
+        indices = prediction.ne(labels).nonzero().reshape(-1).tolist()
+        return indices, prediction[indices].tolist(), labels[indices].tolist()
+
 
 def plot_examples(images, labels, figsize=None):
     _ = plt.figure(figsize=figsize)
@@ -39,6 +44,3 @@ def plot_examples(images, labels, figsize=None):
         plt.yticks([])
 
 
-def model_summary(model, input_size=None):
-    return torchinfo.summary(model, input_size=input_size, depth=5,
-                             col_names=["input_size", "output_size", "num_params", "params_percent"])

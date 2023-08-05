@@ -146,7 +146,8 @@ class CustomResNet(LightningModule):
     
 
 class Acc_Metric(Metric):
-    def __init__(self):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
         self.add_state("correct", default=torch.tensor(0), dist_reduce_fx="sum")
         self.add_state("total", default=torch.tensor(0), dist_reduce_fx="sum")
 
@@ -157,6 +158,6 @@ class Acc_Metric(Metric):
         self.total += total
 
     def compute(self):
-        return 100 * self.correct.float() / self.total           
+        return 100 * self.correct.float() / self.total         
                 
 
