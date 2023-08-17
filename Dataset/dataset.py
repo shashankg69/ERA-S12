@@ -10,7 +10,7 @@ from albumentations.pytorch import ToTensorV2
 from utils import plot_examples
 
 
-class DataSet(ABC):
+class MyDataSet(ABC):
     DataSet = None
     mean = None
     std = None

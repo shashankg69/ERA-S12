@@ -27,6 +27,5 @@ class CIFAR10(MyDataSet):
         A.PadIfNeeded(40, 40, p=1),
         A.RandomCrop(32, 32, p=1),
         A.HorizontalFlip(p=0.5),
-        # Since normalisation was the first step, mean is already 0, so cutout fill_value = 0
         A.CoarseDropout(max_holes=1, max_height=8, max_width=8, fill_value=0, p=1)
     ]
