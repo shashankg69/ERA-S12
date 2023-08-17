@@ -45,6 +45,33 @@ def plot_examples(images, labels, figsize=None, n=20):
         plt.yticks([])
 
 
+def find_lr(model, data_loader, optimizer, criterion):
+    lr_finder = LRFinder(model, optimizer, criterion)
+    lr_finder.range_test(data_loader, end_lr=0.1, num_iter=100, step_mode='exp')
+    _, best_lr = lr_finder.plot()
+    lr_finder.reset()
+    return best_lr
+
+
+def get_incorrect_preds(prediction, labels):
+    prediction = prediction.argmax(dim=1)
+    indices = prediction.ne(labels).nonzero().reshape(-1).tolist()
+    return indices, prediction[indices].tolist(), labels[indices].tolist()
+
+
+def get_cam_visualisation(model, dataset, input_tensor, label, target_layer, use_cuda=False):
+    grad_cam = GradCAM(model=model, target_layers=[target_layer], use_cuda=use_cuda)
+
+    targets = [ClassifierOutputTarget(label)]
+
+    grayscale_cam = grad_cam(input_tensor=input_tensor.unsqueeze(0), targets=targets)
+    grayscale_cam = grayscale_cam[0, :]
+
+    output = show_cam_on_image(dataset.show_transform(input_tensor).cpu().numpy(), grayscale_cam,
+                               use_rgb=True)
+    return output
+
+
 def model_summary(model, input_size=None):
     return torchinfo.summary(model, input_size=input_size, depth=5,
                              col_names=["input_size", "output_size", "num_params", "params_percent"])
