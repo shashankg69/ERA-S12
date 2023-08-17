@@ -59,9 +59,9 @@ class CustomLayer(nn.Module):
         return x
 
 
-class Model(LightningModule):
+class CustomResNet(LightningModule):
     def __init__(self, dataset, batch_size=512, dropout=0.05, max_epochs=24):
-        super(Model, self).__init__()
+        super(CustomResNet, self).__init__()
 
         self.dataset = dataset
         self.batch_size = batch_size
