@@ -1,0 +1,5 @@
+lr-Adam,step,train_loss_step,train_acc_step,epoch,val_loss,val_acc,train_loss_epoch,train_acc_epoch
+4.111402292080116e-05,49,,,,,,,
+,49,nan,0.09765625,0,,,,
+,97,,,0,nan,0.10000000149011612,,
+,97,,,0,,,nan,0.10000000149011612

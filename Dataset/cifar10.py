@@ -3,7 +3,7 @@ import cv2
 from torchvision import datasets
 import albumentations as A
 
-from .dataset import DataSet
+from .dataset import MyDataSet
 
 
 class AlbCIFAR10(datasets.CIFAR10):
@@ -18,7 +18,7 @@ class AlbCIFAR10(datasets.CIFAR10):
         return image, label
 
 
-class CIFAR10(DataSet):
+class CIFAR10(MyDataSet):
     DataSet = AlbCIFAR10
     mean = (0.49139968, 0.48215827, 0.44653124)
     std = (0.24703233, 0.24348505, 0.26158768)
@@ -27,7 +27,6 @@ class CIFAR10(DataSet):
         A.PadIfNeeded(40, 40, p=1),
         A.RandomCrop(32, 32, p=1),
         A.HorizontalFlip(p=0.5),
+        # Since normalisation was the first step, mean is already 0, so cutout fill_value = 0
         A.CoarseDropout(max_holes=1, max_height=8, max_width=8, fill_value=0, p=1)
     ]
-
-    
