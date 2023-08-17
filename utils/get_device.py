@@ -65,7 +65,6 @@ def get_cam_visualisation(model, dataset, input_tensor, label, target_layer, use
     targets = [ClassifierOutputTarget(label)]
 
     grayscale_cam = grad_cam(input_tensor=input_tensor.unsqueeze(0), targets=targets)
-    # In this example grayscale_cam has only one image in the batch:
     grayscale_cam = grayscale_cam[0, :]
 
     output = show_cam_on_image(dataset.show_transform(input_tensor).cpu().numpy(), grayscale_cam,
