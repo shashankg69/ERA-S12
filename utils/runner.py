@@ -1,26 +1,27 @@
-from torch import nn, optim
-from matplotlib import pyplot as plt
+import pandas as pd
 from collections import defaultdict
 
-from .get_device import plot_examples, get_incorrect_preds
-import pandas as pd
 from pytorch_lightning import Trainer
-from pytorch_lightning.callbacks import ModelSummary
-from pytorch_grad_cam import GradCAM
-from pytorch_grad_cam.utils.image import show_cam_on_image
-from pytorch_grad_cam.utils.model_targets import ClassifierOutputTarget
+from pytorch_lightning.callbacks import ModelSummary, LearningRateMonitor
 
-class Runner(object):
+from .get_device import plot_examples, get_cam_visualisation, get_incorrect_preds
+
+
+class Experiment(object):
     def __init__(self, model, max_epochs=None, precision="32-true"):
         self.model = model
         self.dataset = model.dataset
-        self.trainer = Trainer(callbacks= ModelSummary(max_depth=10), max_epochs=max_epochs or model.max_epochs, precision= precision)
         self.incorrect_preds = None
         self.grad_cam = None
-    
-    def run(self):
-        return self.trainer.fit(self.model)
-    
+        self.trainer = Trainer(callbacks=[ModelSummary(max_depth=10), LearningRateMonitor(logging_interval='step')],
+                               max_epochs=max_epochs or model.max_epochs, precision=precision)
+        self.incorrect_preds = None
+        self.incorrect_preds_pd = None
+        self.grad_cam = None
+
+    def execute(self):
+        self.trainer.fit(self.model)
+
     def get_incorrect_preds(self):
         self.incorrect_preds = defaultdict(list)
         incorrect_images = list()
@@ -62,18 +63,3 @@ class Runner(object):
             labels.append(label)
 
         plot_examples(images, labels, figsize=(10, 8))
-
-def get_cam_visualisation(model, dataset, input_tensor, label, target_layer, use_cuda=False):
-        grad_cam = GradCAM(model=model, target_layers=[target_layer], use_cuda=use_cuda)
-        targets = [ClassifierOutputTarget(label)]
-        grayscale_cam = grad_cam(input_tensor=input_tensor.unsqueeze(0), targets=targets)
-        grayscale_cam = grayscale_cam[0, :]
-        output = show_cam_on_image(dataset.show_transform(input_tensor).cpu().numpy(), grayscale_cam,
-                               use_rgb=True)
-        return output
-
-        
-
-
-
-
