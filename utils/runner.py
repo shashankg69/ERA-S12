@@ -7,7 +7,7 @@ from pytorch_lightning.callbacks import ModelSummary, LearningRateMonitor
 from .get_device import plot_examples, get_cam_visualisation, get_incorrect_preds
 
 
-class Experiment(object):
+class Runner(object):
     def __init__(self, model, max_epochs=None, precision="32-true"):
         self.model = model
         self.dataset = model.dataset
@@ -19,7 +19,7 @@ class Experiment(object):
         self.incorrect_preds_pd = None
         self.grad_cam = None
 
-    def execute(self):
+    def runner(self):
         self.trainer.fit(self.model)
 
     def get_incorrect_preds(self):
