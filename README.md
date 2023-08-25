@@ -1,6 +1,6 @@
 # Custom ResNet Model for CIFAR10 with Pytorch Lightning
 
-This repository contains a custom ResNet model implementation for the CIFAR10 dataset. The goal of this project is to achieve a classification accuracy of `90%` or higher on the `CIFAR10` dataset, using techniques such as `Albumentations` for image augmentation and dropout to reduce overfitting.
+This repository contains a custom ResNet model implementation for the CIFAR10 dataset, and the goal of this project is to achieve a classification accuracy of 90% or higher on the CIFAR10 dataset, utilizing techniques like Albumentations for image augmentation and dropout to alleviate overfitting. The model is trained using the PyTorch Lightning framework, which simplifies the training process and provides various utilities for handling training loops, distributed training, and logging.
 
 ## ResNet (Residual Network)
 
